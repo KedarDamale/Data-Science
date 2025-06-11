@@ -1,107 +1,90 @@
-""""
-NumPy Introduction – Cleaned and Expanded Notes
+"""
+NumPy: Numerical Python
+========================
+
+NumPy is a powerful Python library primarily used for:
+- Numerical computing
+- Working with arrays and matrices
+- Performing mathematical and logical operations on arrays
+- Supporting operations in domains like linear algebra, statistics, Fourier transforms, and more
 """
 
-# --------------------------------------------
-# 🧠 Who Created NumPy?
-# --------------------------------------------
-# NumPy was created by Travis Oliphant in 2005.
-# It was developed by combining the functionality of two older Python libraries: Numeric and Numarray.
-# The goal was to create a standardized, high-performance foundation for numerical computations in Python.
+# -------------------------------
+# History and Origin of NumPy
+# -------------------------------
+"""
+- NumPy stands for Numerical Python.
+- Created in 2005 by Travis Oliphant.
+- It is the successor of an older package called Numeric and also merged features from Numarray.
+- NumPy was developed to provide efficient array operations and be a foundation for scientific computing in Python.
+"""
 
-# --------------------------------------------
-# 🔍 Why Was NumPy Developed?
-# --------------------------------------------
-# Python is an interpreted language, which makes it slower compared to compiled languages like C/C++ or Java,
-# especially when processing large volumes of numerical data.
+# -------------------------------
+# Why NumPy?
+# -------------------------------
+"""
+Python has built-in lists, but they have several limitations when it comes to numerical computing:
+1. Lists are general-purpose containers. Each element is an object reference.
+2. Python lists are stored as a list of pointers to memory locations (non-contiguous).
+3. Hence, operations on them involve:
+    - Type checking at runtime
+    - Pointer dereferencing
+    - Dynamic type dispatch
+    => All of this adds overhead and makes them slower for heavy numerical computation.
 
-# NumPy bridges this gap by:
-# - Providing a C-based backend for array operations.
-# - Running performance-critical operations in compiled C/Fortran code under the hood.
-# - Allowing Python developers to write high-performance numerical code with simple, readable syntax.
+In contrast, NumPy arrays:
+- Are homogeneous (same data type)
+- Use contiguous memory blocks (which enables fast computation and vectorization)
+- Avoid type-checking during operations
+- Are implemented in C/C++, allowing low-level memory and processor optimizations
+- Support SIMD (Single Instruction, Multiple Data) and broadcasting, enabling much faster execution
+"""
 
-# This combination gives Python the speed of C and the simplicity of Python,
-# making NumPy a core tool in fields like:
-# - Data Science
-# - Machine Learning
-# - Scientific Computing
-# - Engineering Simulations
-
-# --------------------------------------------
-# 📦 Libraries That Depend on NumPy
-# --------------------------------------------
-# NumPy is a foundational package and a **core dependency** for many major Python libraries:
-# - SciPy      → scientific computations
-# - Pandas     → data analysis and manipulation
-# - scikit-learn → machine learning
-# - TensorFlow / PyTorch → deep learning frameworks
-
-# --------------------------------------------
-# ✅ Importing NumPy
-# --------------------------------------------
+# Demonstrating speed difference
 import numpy as np
+import time
 
-# --------------------------------------------
-# 🆚 Python Lists vs. NumPy Arrays
-# --------------------------------------------
-# Python lists:
-# - Are heterogeneous: can store elements of different types (e.g., int, str, float).
-# - Are not optimized for numerical operations.
-# - Do not support element-wise operations out of the box.
-# - Are flexible but not fast for large-scale computations.
+list1 = list(range(1000000))
+array1 = np.array(list1)
 
-# NumPy arrays:
-# - Are homogeneous: all elements must be of the same data type.
-# - Are stored in contiguous memory blocks, making them much faster.
-# - Support vectorized operations (e.g., element-wise addition, multiplication).
-# - Can perform complex operations like matrix multiplication, dot product, broadcasting.
+# Timing Python list
+start = time.time()
+list_squared = [x ** 2 for x in list1]
+end = time.time()
+print("Time with list:", end - start)
 
-# --------------------------------------------
-# 🧮 Example: Average Temperature (Vanilla Python vs NumPy)
-# --------------------------------------------
+# Timing NumPy array
+start = time.time()
+array_squared = array1 ** 2
+end = time.time()
+print("Time with NumPy:", end - start)
 
-# Using vanilla Python with loop:
-temp = [12, 34, 12, 34, 56, 78, 90, 34, 23]
-temp_total = 0
-for t in temp:
-    temp_total += t
+"""
+Output: NumPy is usually 10x–50x faster depending on the operation.
+"""
 
-print(f"(Python) Average temperature: {temp_total / len(temp):.2f}")
+# -------------------------------
+# Locality of Reference
+# -------------------------------
+"""
+- In computer architecture, "locality of reference" means accessing memory locations that are close to each other.
+- NumPy stores its arrays in contiguous memory locations, improving cache performance.
+- CPUs fetch memory in chunks (cache lines), so accessing one element will load nearby elements too.
+- This leads to fewer cache misses and drastically faster execution for array-wide operations.
+"""
 
-# Using NumPy:
-print(f"(NumPy) Average temperature: {np.mean(temp):.2f}")
+# -------------------------------
+# Under-the-Hood: Why NumPy is Fast
+# -------------------------------
+"""
+1. NumPy uses a C-based implementation of arrays for speed.
+2. Operations are implemented as compiled C loops instead of interpreted Python loops.
+3. Internally uses:
+   - Vectorized instructions (SIMD)
+   - Loop unrolling
+   - Memory prefetching
+4. Broadcasting avoids unnecessary copies of data and handles operations on mismatched shapes.
+5. Interfaces with libraries like BLAS and LAPACK for linear algebra.
 
-# --------------------------------------------
-# ⚡ Performance Boost in NumPy
-# --------------------------------------------
-# Why NumPy is faster:
-# - NumPy internally uses C and Fortran libraries.
-# - Operations are vectorized (executed in bulk at once instead of looping).
-# - Avoids Python-level for loops and uses compiled routines instead.
-
-# Real-world benchmark studies show NumPy can be 10x to 100x faster for numerical workloads.
-
-# --------------------------------------------
-# 📐 NumPy Arrays = Real Arrays (Unlike Python Lists)
-# --------------------------------------------
-# In C/C++, arrays are contiguous blocks of memory storing elements of the same data type.
-# NumPy replicates this behavior in Python using the ndarray object.
-# This allows support for:
-# - Vector algebra (addition, dot product)
-# - Matrix operations
-# - Broadcasting (automatically expanding array shapes)
-
-# Note:
-# If you want actual arrays in Python (not NumPy), you can use the 'array' module:
-import array
-arr = array.array('i', [1, 2, 3])  # Only integer type ('i') allowed
-
-# But this array module is limited compared to NumPy.
-
-# --------------------------------------------
-# 📚 Summary
-# --------------------------------------------
-# - NumPy was built to solve the performance limitations of Python for numerical work.
-# - It is built on C/Fortran, enabling massive speed boosts for numerical tasks.
-# - Provides true arrays with powerful operations like broadcasting, matrix math.
-# - It’s a core building block of the entire Python data science ecosystem.
+Result: NumPy offers high-level syntax with low-level performance.
+"""
