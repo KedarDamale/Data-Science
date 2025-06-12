@@ -1,74 +1,101 @@
-#Iterating means going through elements one by one
+# NumPy Array Iteration – Detailed Notes and Explanations
 
 import numpy as np
 
-#iterating over 1d arrays using for loops
-a=np.array([1,2,3,4,5,6])
+# WHY: Iteration is the process of visiting every element of an array.
+# This is necessary when we want to apply some operation to each item, 
+# such as printing, transforming, or conditional checking.
+
+# --------------------------
+# 1D Array Iteration
+# --------------------------
+
+a = np.array([1, 2, 3, 4, 5, 6])
 
 for i in a:
-    print(i,end=" ")
-print() #1 2 3 4 5 6 
+    print(i, end=" ")
+print()
 
-#iterating over 2d arrays using for loops
+# WHY: Simple for-loops work well on 1D arrays because there's only one level of elements to iterate over.
 
-b=np.array([[1,2,3,4],[5,6,7,8]])
+# --------------------------
+# 2D Array Iteration
+# --------------------------
 
-for i in b:
-    for j in i:
-        print(j,end=" ")
+b = np.array([[1, 2, 3, 4], [5, 6, 7, 8]])
+
+for row in b:
+    for col in row:
+        print(col, end=" ")
     print()
-    
-#here i will iterate over the arrays and j will itrerate over elements present in i i,re array 
-# 1 2 3 4 
-# 5 6 7 8 
 
-# basically if there are 1d arrays then itration will be 1 if 2 then we require 2 loops if nd array then n loops
+# WHY: With 2D arrays, each row is itself an array, so we need a nested loop.
+# First loop gets each row (1D array), second loop gets each element in that row.
 
-#to solve this loop mess numpy support a method named nditer()
+# --------------------------
+# Higher-Dimensional Iteration using np.nditer()
+# --------------------------
 
 arr = np.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
-#here we have 3d array
-print(arr.ndim)
 
-#to iterate over this means to access scalars i.e single quantity we have to have write 3 for loop nditer() minimizes that
+print("Number of dimensions:", arr.ndim)  # 3
 
-for x in np.nditer(arr):
-    print(x ,end=" ") #1 2 3 4 5 6 7 8 
+for val in np.nditer(arr):
+    print(val, end=" ")
 print()
-# our work is done in one for loop
 
-for x in np.nditer(arr[:, ::2]):
-  print(x ,end=" ")
-print() #1 2 5 6 
+# WHY: Iterating higher-dimensional arrays (like 3D or more) with nested loops becomes messy.
+# np.nditer() simplifies this by abstracting away all dimensions into a single iterator.
 
-"""
-we can also skip elements using arry slicing this means get all the arrays but for elements that is innermost get all the elements skipping one
+# --------------------------
+# Slicing + Iteration
+# --------------------------
 
-"""
-#we can also get array with our preffered datatype by op_dtype which will convert the array not inplace that why we need flags argumetnts to execute this in buffer and not with original array
+for val in np.nditer(arr[:, ::2]):
+    print(val, end=" ")
+print()
+
+# WHY: Here, slicing selects only every 2nd column (axis 1), then np.nditer() iterates only over that selection.
+
+# --------------------------
+# Changing Data Type During Iteration using nditer
+# --------------------------
+
 arr = np.array([1, 2, 3])
 
 for x in np.nditer(arr, flags=['buffered'], op_dtypes=['S']):
-  print(x,end=" ")
+    print(x, end=" ")
 print()
 
+# WHY: `op_dtypes=['S']` tells NumPy to treat each element as a string inside the loop.
+# `flags=['buffered']` ensures that conversion happens safely in a temporary buffer.
 
+# --------------------------
+# Enumerating Indices and Elements using enumerate()
+# --------------------------
 
-#enumerate method basically maps each iteration as a counter so you have to manually maintain a counter in vaniall a python
-arr=[23,45,67,89]
+arr = [23, 45, 67, 89]
 
-for i,j in enumerate(arr):
-    print(f"{i}: {j}",end=" ")
-print()  #0: 23 1: 45 2: 67 3: 89 
-
-#numpy also provides us with ndenumerate() function whihc also can map sequences in nd arrays in one loop
-
-a=np.array([[[1,2,3],[4,5,6]],[[1,2,3],[4,5,6]]])
-print(np.ndim(a))
-
-for idx,i in np.ndenumerate(a):
-    print(f"id:{idx},element:{i}")
+for i, val in enumerate(arr):
+    print(f"{i}: {val}", end=" ")
 print()
+
+# WHY: enumerate() is a Python feature that keeps track of index while iterating.
+# Very useful when you need both value and its position.
+
+# --------------------------
+# Enumerating in NumPy using ndenumerate()
+# --------------------------
+
+a = np.array([[[1, 2, 3], [4, 5, 6]], [[1, 2, 3], [4, 5, 6]]])
+print("Dimensions:", np.ndim(a))
+
+for idx, val in np.ndenumerate(a):
+    print(f"Index:{idx}, Value:{val}")
+print()
+
+# WHY: np.ndenumerate() does the same job as enumerate(), but for N-dimensional NumPy arrays.
+# Returns (index_tuple, value) for every scalar value, regardless of how deeply nested it is.=
 
 """
 id:(0, 0, 0),element:1 #0th outermost array i.e 1st 2d array , 0th element in 2d arrays that is 1st id array and oth element in that 1d array i.r 1 , it return a tuple of indeices
