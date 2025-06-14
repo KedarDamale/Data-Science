@@ -21,3 +21,27 @@ data={
     "EHF_IA2":[15,16,16,16,16,14,14,18,17,18]
 }
 df=pd.DataFrame(data)
+
+
+#.loc() property
+# syntax: df.loc[condition,columns]
+
+#use1 - sort of like selct function to select columns based on a condition
+
+# print(df.loc[(df['DMBI_IA1'] > 16) & (df['WEBX_IA1']>18), ['Names', 'DMBI_IA2']])
+
+#use2: to update values
+
+# syntax: df.loc[rowindex or condition , column anem]=new value
+
+# df.loc[9,'Names']="Kedar Pravin Damale" #using 9 row index
+# print(df.tail(1))
+
+# df.loc[df['DMBI_IA1']>16,'Names']="Fucking legends" #using condition
+# print(df.tail())
+
+#although we can update multiple columns at once but it is recommende to use multiple loc satements and also rather using condition in loc put variable name to it and use that variable naem
+
+# condition=(df['DMBI_IA1']>16) & (df['DMBI_IA2']>15)
+# df.loc[condition,'Names']="Geniuses"
+# print(df.tail(5))
