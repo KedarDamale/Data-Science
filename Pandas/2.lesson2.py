@@ -39,6 +39,9 @@ print(df.tail())
 print("last 7 rows")
 print(df.tail(7))
 
+#sample(n)
+#will fetch random 10 values from the database
+
 #info()
 #info method will display information like
 #rows and columns

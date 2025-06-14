@@ -23,7 +23,21 @@ data={
 df=pd.DataFrame(data)
 
 
-#.loc() property
+#.loc() property to access the rows and columns
+#.iloc[] is same as loc but instead of passing column anmes you pass in there indeices 
+"""
+| Feature     | `.loc[]`                                                                   | `.iloc[]`                                             |
+| ----------- | -------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Index Type  | Label-based indexing (uses **row/column names**)                           | Integer-based indexing (uses **integer positions**)   |
+| Index Start | **Depends on the DataFrame index** (could start at 0, 1, or anything else) | Always starts at **0**, just like normal Python lists |
+| Syntax      | `df.loc[row_label, column_label]`                                          | `df.iloc[row_position, column_position]`              |
+
+"""
+#print(df.loc[1,2,3,5]) will print row 1 2 3 and 5 also can use slice syuntax like 0:45
+
+# print([0,2,3,4,5],['colum1,'colum2']) will return two cloumns and thoise rows basically dont put in values if you want all rows or columns
+ 
+ 
 # syntax: df.loc[condition,columns]
 
 #use1 - sort of like selct function to select columns based on a condition
@@ -65,3 +79,8 @@ Afterr:
 
 """
 
+# at and iat
+
+# print(df.at(0,"column name")) will return value at 0 row and column doesnt work for multiple thing just for one
+
+# iat is basically like iloc for idecid
