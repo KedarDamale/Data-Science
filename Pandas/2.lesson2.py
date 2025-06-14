@@ -91,14 +91,186 @@ max    18.000000  17.000000  20.000000  ...    20.00000  18.000000  18.000000
 [8 rows x 10 columns]
 """
 #as you can see count mean std deviation and many more parameters
-# count:number of elements
-# mean:average
-# std deviation mean how data differs from mean smal std: those who are very close to mean large std: numbers who are not close to mean
-# min ; minimumum of all
-# 25%:0t0 25 percentile data
-# 50%;median middle element
-# 75% means values from 50 to 100
-# max means maximum from elements
+"""
+You're referring to the statistical summary typically provided by functions like `DataFrame.describe()` in **Pandas** or similar summary statistics in **NumPy**, **SciPy**, etc. Let's break each term down with **detailed technical explanations**, **reasoning**, and **examples**:
+
+---
+
+### 📌 1. `count` – **Number of Non-Null Elements**
+
+* **Definition**: The total number of **non-missing (non-NaN)** values in a column or dataset.
+* **Why it’s used**: Helps understand if there are missing values and how many actual values contribute to calculations.
+* **Example**:
+
+  ```python
+  import pandas as pd
+  data = pd.Series([10, 20, None, 30])
+  print(data.count())  # Output: 3
+  ```
+
+  * Even though there are 4 elements, `count` is 3 because one is `None` (missing/NaN).
+
+---
+
+### 📌 2. `mean` – **Arithmetic Average**
+
+* **Definition**: Sum of all values divided by the number of values.
+* **Formula**:
+
+  $$
+  \text{mean} = \frac{x_1 + x_2 + \cdots + x_n}{n}
+  $$
+* **Why it’s used**: Represents the **central tendency** of the data – a "typical" value.
+* **Limitation**: Sensitive to **outliers**.
+* **Example**:
+
+  ```python
+  import numpy as np
+  arr = np.array([10, 20, 30, 40])
+  print(np.mean(arr))  # Output: 25.0
+  ```
+
+---
+
+### 📌 3. `std` – **Standard Deviation**
+
+* **Definition**: Measures the **spread** or **dispersion** of values from the mean.
+* **Interpretation**:
+
+  * **Low std** → values are **close to the mean** (less variability).
+  * **High std** → values are **widely spread** from the mean.
+* **Formula**:
+
+  $$
+  \sigma = \sqrt{\frac{1}{n} \sum_{i=1}^{n}(x_i - \bar{x})^2}
+  $$
+* **Why it's important**: Tells you how consistent your data is.
+* **Example**:
+
+  ```python
+  arr1 = np.array([10, 12, 11])  # std is low
+  arr2 = np.array([1, 50, 100]) # std is high
+  print(np.std(arr1), np.std(arr2))
+  ```
+
+---
+
+### 📌 4. `min` – **Minimum Value**
+
+* **Definition**: The **smallest** value in the data.
+* **Why it’s useful**: Gives you the **lower bound** of the range.
+* **Example**:
+
+  ```python
+  arr = np.array([4, 10, 2, 99])
+  print(np.min(arr))  # Output: 2
+  ```
+
+---
+
+### 📌 5. `25%` – **First Quartile (Q1)**
+
+* **Definition**: 25th percentile. It means **25%** of the data points are **less than or equal to** this value.
+* **Why it’s useful**: Helps understand the **distribution** of the lower segment of data.
+* **Example**:
+
+  ```python
+  arr = np.array([10, 20, 30, 40])
+  print(np.percentile(arr, 25))  # Output: 17.5
+  ```
+
+---
+
+### 📌 6. `50%` – **Median (Q2)**
+
+* **Definition**: The **middle value** of a sorted dataset.
+
+  * If odd number of items → middle one.
+  * If even → average of two middle values.
+* **Why it’s important**: Unlike mean, it is **robust to outliers**.
+* **Example**:
+
+  ```python
+  arr = np.array([1, 2, 3])
+  print(np.median(arr))  # Output: 2
+
+  arr = np.array([1, 2, 3, 100])
+  print(np.median(arr))  # Output: 2.5 (resistant to 100)
+  ```
+
+---
+
+### 📌 7. `75%` – **Third Quartile (Q3)**
+
+* **Definition**: 75th percentile. It means **75% of values are below** this value.
+* **Why it’s used**: Shows the **upper middle** part of the distribution.
+* **Example**:
+
+  ```python
+  arr = np.array([10, 20, 30, 40])
+  print(np.percentile(arr, 75))  # Output: 32.5
+  ```
+
+---
+
+### 📌 8. `max` – **Maximum Value**
+
+* **Definition**: The **largest** value in the data.
+* **Why it’s useful**: Gives you the **upper bound** of the range.
+* **Example**:
+
+  ```python
+  arr = np.array([4, 10, 2, 99])
+  print(np.max(arr))  # Output: 99
+  ```
+
+---
+
+### ✅ Summary Table
+
+| Statistic | Description               | Purpose                 |
+| --------- | ------------------------- | ----------------------- |
+| `count`   | Number of non-null values | Data completeness check |
+| `mean`    | Arithmetic average        | Central tendency        |
+| `std`     | Standard deviation        | Spread or variability   |
+| `min`     | Minimum value             | Lower bound             |
+| `25%`     | First quartile (Q1)       | Lower quartile analysis |
+| `50%`     | Median (Q2)               | Robust central value    |
+| `75%`     | Third quartile (Q3)       | Upper quartile analysis |
+| `max`     | Maximum value             | Upper bound             |
+
+---
+
+### 🧠 Pro Tip: Use `.describe()` in Pandas
+
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "Scores": [35, 40, 45, 50, 55, 60, 65, 70, 75, 100]
+})
+print(df.describe())
+```
+
+This gives:
+
+```
+count     10.000000
+mean      59.500000
+std       19.573743
+min       35.000000
+25%       48.750000
+50%       57.500000
+75%       70.000000
+max      100.000000
+```
+
+---
+
+Let me know if you want **visualizations** for these using **Matplotlib** or **Seaborn**.
+
+"""
+
 
 """
 from the describe method we can take out conclusions such as
