@@ -45,3 +45,23 @@ df=pd.DataFrame(data)
 # condition=(df['DMBI_IA1']>16) & (df['DMBI_IA2']>15)
 # df.loc[condition,'Names']="Geniuses"
 # print(df.tail(5))
+
+#we can use normal assgigment to update many values
+
+# df['DMBI_IA1']=df['DMBI_IA1']+2 #incrementing 2 marks for all
+# print(df.tail())
+
+#but if we want to precisly update something like updation based on a condition then loc
+#incremeting marks by 2 for those who have failed
+
+print(df.head(7))
+df.loc[df['DMBI_IA1']<8,'DMBI_IA1']=df['DMBI_IA1']+2 #incrementing marks based on condition
+print(df[['Names','DMBI_IA1']])
+"""
+Before:
+5        BHATKAR SAHIL VILAS         6        12  ...          15       10       14
+Afterr:
+5        BHATKAR SAHIL VILAS         8        12  ...          15       10       14
+
+"""
+
